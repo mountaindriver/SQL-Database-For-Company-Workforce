@@ -23,15 +23,6 @@ const db = mysql.createConnection(
   console.log(`Connected to the books_db database.`)
 );
 
-// Query database using COUNT() and GROUP BY
-db.query('', function (err, results) {
-  console.log(results);
-});
-
-// Query database using SUM(), MAX(), MIN() AVG() and GROUP BY
-db.query('', function (err, results) {
-  console.log(results);
-});
 
 app.use((req, res) => {
   res.status(404).end();
