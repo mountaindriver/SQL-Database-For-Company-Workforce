@@ -1,4 +1,4 @@
-const addEmployee = function () {
+const addEmployee = () => {
     inquirer.prompt([
         {
             name: 'first_name',
@@ -79,14 +79,14 @@ const addEmployee = function () {
         },
     ])
         .then((data) => {
-            db.promise().query(`ALTER TABLE employee ADD ${data.first_name} ${data.last_name} ${data.role_id} ${data.manager_id}`);
+            db.query(`ALTER TABLE employee ADD ${data.first_name} ${data.last_name} ${data.role_id} ${data.manager_id}`);
             console.log('New employee added');
             console.table();
             employeeTracker();
         })
 }
 
-const updateEmployee = function () {
+const updateEmployee = () => {
     inquirer
         .promt(
             {

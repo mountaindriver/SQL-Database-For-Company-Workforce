@@ -1,4 +1,4 @@
-const addDepartment = function () {
+const addDepartment = () => {
     inquirer
         .prompt([
             {
@@ -8,6 +8,8 @@ const addDepartment = function () {
             },
         ])
         .then((data) => {
+            db.promise().query(`ALTER TABLE department ADD ${data.title}`).then((res)=> console.table(res))
+
             db.promise().query(`ALTER TABLE department ADD ${data.title}`);
             console.log('New department added');
             console.table();

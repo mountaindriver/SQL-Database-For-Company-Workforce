@@ -6,8 +6,6 @@ const addDepartment = require("./src/department");
 const editEmployees = require("./src/employee");
 const addRole = require('./src/role');
 
-inquirer.registerPrompt("loop", require("inquirer-loop")(inquirer))
-
 const db = mysql.createConnection(
     {
         host: 'localhost',
@@ -19,7 +17,7 @@ const db = mysql.createConnection(
 );
 
 
-const employeeTracker = function () {
+const employeeTracker = () => {
 
     inquirer
         .prompt(

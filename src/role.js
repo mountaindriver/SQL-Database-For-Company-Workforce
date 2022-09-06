@@ -1,5 +1,5 @@
 
-const addRole = function () {
+const addRole = () => {
     inquirer
         .prompt([
             {
