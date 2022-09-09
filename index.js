@@ -2,19 +2,11 @@ const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const cTable = require('console.table');
 require('dotenv').config();
-const addDepartment = require("./src/department");
-const editEmployees = require("./src/employee");
-const addRole = require('./src/role');
 
-const db = mysql.createConnection(
-    {
-        host: 'localhost',
-        user: 'root',
-        password: process.env.SQLPASS,
-        database: 'company_db'
-    },
-    console.log(`Connected to the books_db database.`)
-);
+const db = require('./connection/connection.js')
+const {addDepartment} = require("./src/department");
+const {addEmployee, updateEmployee, viewEmployee} = require("./src/employee");
+const {addRole} = require('./src/role');
 
 
 const employeeTracker = () => {
@@ -39,7 +31,10 @@ const employeeTracker = () => {
         .then((data) => {
             switch (data.action) {
                 case `View All Employees`:
-                    db.promise().query('SELECT * FROM employee;');
+                    viewEmployee().then(([a])=>{
+                        console.table(a)
+                        employeeTracker()
+                    })
                     break;
 
                 case `Add An Employee`:
@@ -75,3 +70,5 @@ const employeeTracker = () => {
 
 
 employeeTracker();
+                    
+

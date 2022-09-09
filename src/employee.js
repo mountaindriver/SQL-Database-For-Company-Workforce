@@ -1,3 +1,6 @@
+const db = require('../connection/connection')
+
+
 const addEmployee = () => {
     inquirer.prompt([
         {
@@ -183,4 +186,9 @@ const updateEmployee = () => {
         })
 };
 
-module.exports = { addEmployee, updateEmployee }
+
+const viewEmployee = ()=>{
+   return db.promise().query('SELECT * FROM employee;');
+}
+
+module.exports = { addEmployee, updateEmployee, viewEmployee }

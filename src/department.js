@@ -17,4 +17,4 @@ const addDepartment = () => {
         })
 };
 
-module.export = {addDepartment}
+module.exports = {addDepartment}
