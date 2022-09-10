@@ -1,5 +1,6 @@
-const db = require('../connection/connection')
-
+const db = require('../connection/connection');
+const inquirer = require('inquirer');
+const mysql = require('mysql2');
 
 const addEmployee = () => {
     inquirer.prompt([
@@ -39,7 +40,8 @@ const addEmployee = () => {
                 {
                     name: 'Account Manager',
                     value: 5,
-                }, {
+                }, 
+                {
                     name: "Accountant",
                     value: 6,
                 },
@@ -91,7 +93,7 @@ const addEmployee = () => {
 
 const updateEmployee = () => {
     inquirer
-        .promt(
+        .prompt(
             {
                 name: "employee.id",
                 type: "input",
@@ -189,6 +191,6 @@ const updateEmployee = () => {
 
 const viewEmployee = ()=>{
    return db.promise().query('SELECT * FROM employee;');
-}
+};
 
 module.exports = { addEmployee, updateEmployee, viewEmployee }

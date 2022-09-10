@@ -1,3 +1,6 @@
+const inquirer = require('inquirer');
+const mysql = require('mysql2');
+
 const addDepartment = () => {
     inquirer
         .prompt([
@@ -17,4 +20,8 @@ const addDepartment = () => {
         })
 };
 
-module.exports = {addDepartment}
+const viewDepartment = ()=> {
+   return db.promise().query('SELECT * FROM departments;');
+};
+
+module.exports = {addDepartment, viewDepartment}

@@ -4,9 +4,9 @@ const cTable = require('console.table');
 require('dotenv').config();
 
 const db = require('./connection/connection.js')
-const {addDepartment} = require("./src/department");
+const {addDepartment, viewDepartment} = require("./src/department");
 const {addEmployee, updateEmployee, viewEmployee} = require("./src/employee");
-const {addRole} = require('./src/role');
+const {addRole, viewRole} = require('./src/role');
 
 
 const employeeTracker = () => {
@@ -38,27 +38,45 @@ const employeeTracker = () => {
                     break;
 
                 case `Add An Employee`:
-                    addEmployee();
+                    addEmployee().then((a)=>{
+                        console.table(a)
+                        employeeTracker()
+                    })
                     break;
 
                 case `Update An Employee Role`:
-                    updateEmployee();
+                    updateEmployee().then((a)=>{
+                        console.table(a)
+                        employeeTracker()
+                    })
                     break;
 
                 case `View All Roles`:
-                    db.promise().query('SELECT * FROM role JOIN departments ON role.department_id=departments.title;');
+                    viewRole().then((a)=>{
+                        console.table(a)
+                        employeeTracker()
+                    })
                     break;
 
                 case `Add A Role`:
-                    addRole();
+                    addRole().then((a)=>{
+                        console.table(a)
+                        employeeTracker()
+                    })
                     break;
 
                 case `View all Departments`:
-                    db.promise().query('SELECT * FROM departments;');
+                    viewDepartment().then((a)=>{
+                        console.table(a)
+                        employeeTracker()
+                    })
                     break;
 
                 case `Add A Department`:
-                    addDepartment();
+                    addDepartment().then((a)=>{
+                        console.table(a)
+                        employeeTracker()
+                    })
                     break;
 
                 case `Quit`:

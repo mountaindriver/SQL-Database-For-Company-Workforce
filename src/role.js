@@ -1,3 +1,5 @@
+const inquirer = require('inquirer');
+const mysql = require('mysql2');
 
 const addRole = () => {
     inquirer
@@ -44,4 +46,8 @@ const addRole = () => {
         })
 };
 
-module.exports = {addRole}
+const viewRole = () => {
+   return db.promise().query('SELECT * FROM role JOIN departments ON role.department_id=departments.title;')
+};
+
+module.exports = { addRole, viewRole }
