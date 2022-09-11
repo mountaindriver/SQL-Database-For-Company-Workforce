@@ -8,7 +8,7 @@
   <h3 align="center">SQL Database for Company Workforce </h3>
     <p align="center">
        <br />
-       <a href="https://drive.google.com/file/d/1wMxbvPgR9m7Hnizt86rLUEJkxaM75iX4/view"><strong>View Demo</strong></a>
+       <a href="https://drive.google.com/file/d/1_840Kcn_UuuxqHBpJGXoLmSkPOR25E9H/view"><strong>View Demo</strong></a>
        <br>
       <a href="https://github.com/mountaindriver/SQL-Database-For-Company-Workforce"><strong>Explore the docs »</strong></a>
       <br />
@@ -46,6 +46,9 @@
   ## Usage
   
   This is a content management system that allows non-developers to easily view and interact with information.
+    1. Open intergrated terminal
+    2. type in and run "npm i"
+    3. type in and run "node index"
   
   <p align="right">(<a href="#readme-top">back to top</a>)</p>
   

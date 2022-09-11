@@ -1,7 +1,9 @@
+// Dependencies
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 require('dotenv').config();
 
+// Connection to SQL(database)
 const db = mysql.createConnection(
     {
         host: 'localhost',
@@ -16,6 +18,8 @@ db.connect(function (err) {
     employeeTracker();
 });
 
+
+// main function that shows list of options to client
 const employeeTracker = () => {
 
     inquirer
@@ -72,12 +76,13 @@ const employeeTracker = () => {
         })
 };
 
-
-// add department same but department, add role is same but select all from department
+// List of function used in employee tracker, listed in the same order as displayed in app
 const addEmployee = () => {
+    // arrays the options are stored into
     let employeeARR = [];
     let roleARR = [];
 
+    // gets list of employees and put it into employeeARR
     db.query(`SELECT * FROM employee`, (err, res) => {
         if (err) {
             console.error(err);
@@ -97,25 +102,26 @@ const addEmployee = () => {
 
         }
 
+        // gets list of roles and put it into roleeARR
         db.query(`SELECT * FROM role`, (err, res) => {
             if (err) {
                 console.error(err);
             }
-    
+
             for (let i = 0; i < res.length; i++) {
                 let role = res[i];
                 let roleId = role.id;
                 let roleTitle = role.title;
-    
+
                 let obj = {
                     name: roleTitle, value: roleId
                 };
-    
+
                 roleARR.push(obj);
-    
+
             }
         })
-
+        // asks question to client and gathers data
         inquirer.prompt([
             {
                 name: 'first_name',
@@ -131,42 +137,7 @@ const addEmployee = () => {
                 name: 'role_id',
                 type: 'list',
                 message: 'What is thier role?',
-                choices: [
-                    {
-                        name: "Sales lead",
-                        value: 1,
-                    },
-                    {
-                        name: 'Salesperson',
-                        value: 2,
-                    }, {
-                        name: "Sales lead",
-                        value: 1,
-                    },
-                    {
-                        name: 'Lead Engineer',
-                        value: 3,
-                    }, {
-                        name: "Software Engineer",
-                        value: 4,
-                    },
-                    {
-                        name: 'Account Manager',
-                        value: 5,
-                    },
-                    {
-                        name: "Accountant",
-                        value: 6,
-                    },
-                    {
-                        name: 'Legal Team Lead',
-                        value: 7,
-                    },
-                    {
-                        name: 'Lawyer',
-                        value: 8,
-                    },
-                ]
+                choices: roleARR,
             },
             {
                 name: 'manager_id',
@@ -175,6 +146,8 @@ const addEmployee = () => {
                 choices: employeeARR,
             },
         ])
+
+            // Takes data and insert it into the database
             .then((data) => {
                 db.query(`INSERT INTO employee SET ?`, data, (err, res) => {
                     if (err) {
@@ -190,8 +163,46 @@ const addEmployee = () => {
 const updateEmployee = () => {
     db.query(`select CONCAT(first_name," ",last_name) AS name, id as value from employee`, (err, res) => {
 
-        console.log(res);
+        let roleARR = [];
+        let employeeARR = [];
 
+        db.query(`SELECT * FROM employee`, (err, res) => {
+            if (err) {
+                console.error(err);
+            }
+
+
+            for (let i = 0; i < res.length; i++) {
+                let employee = res[i];
+                let employeeId = employee.id;
+                let employeeName = employee.first_name + " " + employee.last_name;
+
+                let obj = {
+                    name: employeeName, value: employeeId
+                };
+
+                employeeARR.push(obj);
+            }
+        })
+
+        db.query(`SELECT * FROM role`, (err, res) => {
+            if (err) {
+                console.error(err);
+            }
+
+            for (let i = 0; i < res.length; i++) {
+                let role = res[i];
+                let roleId = role.id;
+                let roleTitle = role.title;
+
+                let obj = {
+                    name: roleTitle, value: roleId
+                };
+
+                roleARR.push(obj);
+
+            }
+        })
 
         inquirer
             .prompt([
@@ -200,72 +211,27 @@ const updateEmployee = () => {
                     name: 'employee_id',
                     type: 'list',
                     message: 'Who are you updating?',
-                    choices: res,
+                    choices: employeeARR,
                 },
                 {
                     name: "role_id",
                     type: "list",
                     message: "What is thier role?",
-                    choices: [
-                        {
-                            name: "Sales lead",
-                            value: 1,
-                        },
-                        {
-                            name: 'Salesperson',
-                            value: 2,
-                        },
-                        {
-                            name: "Sales lead",
-                            value: 1,
-                        },
-                        {
-                            name: 'Lead Engineer',
-                            value: 3,
-                        },
-                        {
-                            name: "Software Engineer",
-                            value: 4,
-                        },
-                        {
-                            name: 'Account Manager',
-                            value: 5,
-                        },
-                        {
-                            name: "Accountant",
-                            value: 6,
-                        },
-                        {
-                            name: 'Legal Team Lead',
-                            value: 7,
-                        },
-                        {
-                            name: 'Lawyer',
-                            value: 8,
-                        },
-                    ],
+                    choices: roleARR,
                 },
-            ]
-
-
-            )
+            ])
             .then((data) => {
                 db.query(`UPDATE employee SET role_id=? where id=?`, [data.role_id, data.employee_id], (err, res) => {
                     if (err) {
                         throw err;
                     }
-
                     console.log(`Updated employee!`)
                 })
-
-
                 employeeTracker();
             })
-    })
+})
 };
 
-
-// same as viewrole, view departments
 const viewEmployee = () => {
     db.query(`SELECT employee.first_name, employee.last_name, role.salary, departments.title, manager.first_name AS manager
      FROM employee 
@@ -277,15 +243,12 @@ const viewEmployee = () => {
     })
 };
 
-
 const addRole = () => {
 
     db.query(`SELECT * FROM departments`, (err, res) => {
         if (err) {
             console.error(err);
         };
-
-        console.log(res);
 
         let departmentARR = [];
 
@@ -300,7 +263,7 @@ const addRole = () => {
 
             departmentARR.push(obj);
         };
-    
+
         inquirer.prompt([
             {
                 name: 'role_title',
@@ -320,6 +283,7 @@ const addRole = () => {
             }
         ])
             .then((data) => {
+                console.log(data)
                 db.query(`INSERT INTO role SET ?`, data, (err, res) => {
                     if (err) {
                         console.error(err);
@@ -331,20 +295,22 @@ const addRole = () => {
     })
 };
 
-
 const viewRole = () => {
     db.query(`SELECT 
     role.title, role.salary, departments.title 
     AS Department 
     FROM role
     JOIN departments ON role.department_id=departments.id;`, (err, res) => {
+        if (err) {
+            console.error(err);
+        }
         console.table(res);
         employeeTracker();
     });
 };
 
-
 const addDepartment = () => {
+
     inquirer
         .prompt([
             {
@@ -354,11 +320,12 @@ const addDepartment = () => {
             },
         ])
         .then((data) => {
-            db.promise().query(`ALTER TABLE department ADD ${data.title}`).then((res) => console.table(res))
-
-            db.promise().query(`ALTER TABLE department ADD ${data.title}`);
+            db.promise().query(`INSERT INTO departments SET ?`, data, (err, res) => {
+                if (err) {
+                    console.error(err);
+                }
+            })
             console.log('New department added');
-            console.table();
             employeeTracker();
         })
 };
